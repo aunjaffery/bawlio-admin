@@ -1,15 +1,24 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import LoginPage from "@pages/authScreens/Login";
 import ContactList from "@pages/contacts/ContactList";
 import Navbar from "@components/navbar/Navbar";
+import { useEffect } from "react";
+import { useAuthStore } from "./auth_module/store/auth_store";
 
 const queryClient = new QueryClient();
 function App() {
+  const { success } = useAuthStore((state) => state);
+  const navigate = useNavigate();
   const getUrl = (pathname) => {
     return pathname === "/login" ? true : false;
   };
+  useEffect(() => {
+    if (success === false) {
+      navigate("/login");
+    }
+  }, [success]);
 
   const { pathname } = useLocation();
 
@@ -24,8 +33,7 @@ function App() {
           <Box>
             <Navbar />
             <Routes>
-              <Route path="/contactlist" element={<ContactList />} />
-              <Route path="*" element={<Navigate to="/login" />} />
+              <Route path="/" element={<ContactList />} />
             </Routes>
           </Box>
         )}

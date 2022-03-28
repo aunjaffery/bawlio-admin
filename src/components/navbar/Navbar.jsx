@@ -1,10 +1,12 @@
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../auth_module/store/auth_store";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { logoutUser } = useAuthStore((state) => state);
   return (
-    <Box bg="brand.900">
+    <Box bg="blue.700">
       <Container maxW="container.xl">
         <Flex h="69px" justify="space-between" align="center">
           <Box>
@@ -17,7 +19,7 @@ const Navbar = () => {
               cursor="pointer"
               color="white"
               _hover={{ color: "blue.200" }}
-              onClick={() => navigate("login")}
+              onClick={() => logoutUser()}
             >
               Logout
             </Text>

@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import Auth from "./auth_module/Auth";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 const colors = {
@@ -48,10 +49,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-        <App />
+        <Auth>
+          <App />
+        </Auth>
       </BrowserRouter>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
-

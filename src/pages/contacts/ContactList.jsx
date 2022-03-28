@@ -4,6 +4,7 @@ import ContactTable from "@components/tables/ContactTable";
 import { useQuery } from "react-query";
 import PageTitle from "@components/common/PageTitle";
 import { useMemo } from "react";
+import moment from "moment";
 
 const ContactList = () => {
   const {
@@ -15,6 +16,10 @@ const ContactList = () => {
   console.log(isLoading);
   const columns = useMemo(
     () => [
+      {
+        Header: "ID",
+        accessor: "id",
+      },
       {
         Header: "First Name",
         accessor: "firstName",
@@ -31,6 +36,17 @@ const ContactList = () => {
         Header: "Phone",
         accessor: "phone",
       },
+      {
+        Header: "Created At",
+        accessor: "createdAt",
+        Cell: (props) => (
+          <Box>
+            <Text color="green.500">
+              {moment(props.value).format("h:mmA DD-MM-YY")}
+            </Text>
+          </Box>
+        ),
+      },
     ],
     []
   );
@@ -45,7 +61,7 @@ const ContactList = () => {
         ) : (
           <Box>
             <PageTitle title="Contacts" />
-            <Box bg="gray.100" p="8" borderRadius="lg">
+            <Box bg="gray.100" borderRadius="lg" pb="6">
               <ContactTable columns={columns} data={contactData} />
             </Box>
           </Box>

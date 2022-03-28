@@ -7,18 +7,40 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { AiOutlineLock, AiOutlineUser } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../auth_module/store/auth_store";
 import "./authStyle.scss";
+import { useEffect } from "react";
 const LoginPage = () => {
   const navigate = useNavigate();
-  const onLogin = (e) => {
+  const toast = useToast();
+  const { loginAdmin, success, user } = useAuthStore((state) => state);
+
+  useEffect(() => {
+    if (success && user) {
+      navigate("/");
+    }
+  });
+
+  console.log("zus", success, user);
+
+  const onLogin = async (e) => {
     e.preventDefault();
     let username = e.target.username.value;
     let password = e.target.password.value;
-    if (!username || !password) return;
-    navigate("/contactlist");
+    if (!username || !password) {
+      toast({
+        title: "Fields cannot be empty",
+        status: "warning",
+        position: "top-right",
+        isClosable: true,
+      });
+      return;
+    }
+    await loginAdmin(username, password);
   };
   const inputStyles = {
     variant: "outline",

@@ -12,6 +12,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useTable, usePagination } from "react-table";
+import ScrollComponent from "@components/common/ScrollComponent";
 
 const CustomerTable = ({ columns, data }) => {
   // Use the state and functions returned from useTable to build your UI
@@ -37,7 +38,7 @@ const CustomerTable = ({ columns, data }) => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0, pageSize: 50 },
     },
     usePagination
   );
@@ -52,42 +53,42 @@ const CustomerTable = ({ columns, data }) => {
   // Render the UI for your table
   return (
     <>
-      <Table {...getTableProps()}>
-        <Thead>
-          {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th
-                  {...column.getHeaderProps()}
-                  color="gray.800"
-                  borderColor="border.100"
-                  py="6"
-                >
-                  {column.render("Header")}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row.getRowProps()} _hover={{ bg: "gray.200" }}>
-                {row.cells.map((cell) => {
-                  return (
-                    <Td {...cell.getCellProps()} sx={tdStyle}>
-                      <Text isTruncated maxW="280px" fontSize="sm">
-                        {cell.render("Cell")}
-                      </Text>
-                    </Td>
-                  );
-                })}
+      <ScrollComponent h="800px">
+        <Table {...getTableProps()}>
+          <Thead position="sticky" top="0" bg="blue.700">
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th
+                    {...column.getHeaderProps()}
+                    color="white"
+                    borderColor="border.100"
+                    py="6"
+                  >
+                    {column.render("Header")}
+                  </Th>
+                ))}
               </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
+            ))}
+          </Thead>
+          <Tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row.getRowProps()} _hover={{ bg: "gray.200" }}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td {...cell.getCellProps()} sx={tdStyle}>
+                        {cell.render("Cell")}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </ScrollComponent>
       <Flex mt="4" justify="space-between" px="4">
         <Flex align="center" gridGap="2">
           <Select
@@ -98,7 +99,7 @@ const CustomerTable = ({ columns, data }) => {
             minW="70px"
             size="sm"
           >
-            {[2, 10, 20, 30, 40, 50].map((pageSize) => (
+            {[50, 100, 250].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>
